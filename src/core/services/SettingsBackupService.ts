@@ -85,8 +85,6 @@ export const BACKUPABLE_SYNC_SETTINGS_DEFAULTS: Record<string, unknown> = {
   [StorageKeys.GV_FOLDER_SPACING]: 2,
   [StorageKeys.GV_AISTUDIO_FOLDER_SPACING]: 2,
   [StorageKeys.GV_FOLDER_TREE_INDENT]: -8,
-  [StorageKeys.GV_SNOW_EFFECT]: false,
-  [StorageKeys.GV_VISUAL_EFFECT]: 'off',
   [StorageKeys.FORK_ENABLED]: false,
   [StorageKeys.GV_AISTUDIO_ENABLED]: true,
   [StorageKeys.GV_SHOW_MESSAGE_TIMESTAMPS]: false,

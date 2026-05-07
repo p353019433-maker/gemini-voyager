@@ -87,7 +87,6 @@ C'est pourquoi nous avons créé **Voyager**. Plus qu'un simple outil, c'est un 
 - **💡 [Coffre-fort de Prompts](https://voyager.nagi.fun/fr/guide/prompts)** : Enregistrez et réutilisez vos meilleurs prompts sur Gemini, AI Studio et [sites personnalisés](https://voyager.nagi.fun/fr/guide/custom-websites).
 - **☁️ [Sincronisation Cloud](https://voyager.nagi.fun/fr/guide/cloud-sync)** : Synchronisez vos dossiers et coffre-fort de prompts avec Google Drive.
 - **📐 Copie de Formules**: Copie en un clic des codes sources LaTeX et MathML (Word).
-- **🌦️ Effets Visuels** : Ajoutez une ambiance saisonnière avec **neige**, **pluie cinématique** ou **pétales de sakura** depuis le panneau de paramètres.
 
 ### ✨ Fonctions Exclusives Gemini
 
@@ -105,12 +104,6 @@ C'est pourquoi nous avons créé **Voyager**. Plus qu'un simple outil, c'est un 
   - **[Réduction Entrée](https://voyager.nagi.fun/fr/guide/input-collapse)** : Zone de saisie auto-réductible pour plus d'espace de lecture.
   - **[Modèle par Défaut](https://voyager.nagi.fun/fr/guide/default-model)** : Définissez votre modèle préféré par défaut.
   - **[Masquer les éléments récents et Gems](https://voyager.nagi.fun/fr/guide/recents-hider)** : Masquer la liste "Récents" dans la barre latérale pour réduire les distractions.
-
-### 🎨 Personnalisation
-
-- Ouvrez le popup de l'extension et recherchez **Effets Visuels** pour basculer entre `Désactivé`, `Neige`, `Sakura` et `Pluie`.
-- Les effets sont rendus sous forme de couches légères plein écran qui ne bloquent pas l'interaction avec la page.
-- Lors du changement d'effet ou de la désactivation, les particules s'estompent naturellement au lieu de disparaître brusquement.
 
 ---
 

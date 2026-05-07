@@ -1611,30 +1611,6 @@
     "message": "المواقع المبحوثة",
     "description": "عنوان قسم المواقع المبحوثة في Deep Research"
   },
-  "visualEffect": {
-    "message": "المؤثرات البصرية",
-    "description": "Visual effect selector label"
-  },
-  "visualEffectHint": {
-    "message": "أضف أجواء موسمية للصفحة",
-    "description": "Visual effect feature hint"
-  },
-  "visualEffectOff": {
-    "message": "إيقاف",
-    "description": "Visual effect off option"
-  },
-  "visualEffectSnow": {
-    "message": "ثلج",
-    "description": "Visual effect snow option"
-  },
-  "visualEffectSakura": {
-    "message": "ساكورا",
-    "description": "Visual effect sakura option"
-  },
-  "visualEffectRain": {
-    "message": "مطر",
-    "description": "Visual effect rain option"
-  },
   "changelog_title": {
     "message": "الجديد",
     "description": "Changelog modal title"

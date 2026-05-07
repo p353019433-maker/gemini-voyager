@@ -44,7 +44,6 @@ import { startSidebarWidthAdjuster } from './sidebarWidth';
 import { startTimeline } from './timeline/index';
 import { startTitleUpdater } from './titleUpdater';
 import { startUserLatex } from './userLatex/index';
-import { startRainEffect, startSakuraEffect, startSnowEffect } from './visualEffects';
 import { startWatermarkRemover } from './watermarkRemover/index';
 
 // Suppress Vite's CSS preload errors in the Chrome extension content script context.
@@ -208,11 +207,6 @@ async function initializeFeatures(): Promise<void> {
       await delay(LIGHT_FEATURE_INIT_DELAY);
 
       startSidebarAutoHide();
-      await delay(LIGHT_FEATURE_INIT_DELAY);
-
-      startSnowEffect();
-      startSakuraEffect();
-      startRainEffect();
       await delay(LIGHT_FEATURE_INIT_DELAY);
 
       startInputCollapse();

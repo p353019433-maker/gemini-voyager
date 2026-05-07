@@ -68,7 +68,6 @@ const POPUP_SECTION_IDS = [
   'editInputWidth',
   'sidebarWidth',
   'sidebarBehavior',
-  'visualEffect',
   'formulaCopy',
   'keyboardShortcuts',
   'inputCollapse',
@@ -345,7 +344,6 @@ interface SettingsUpdate {
   draftAutoSaveEnabled?: boolean;
   sidebarAutoHideEnabled?: boolean;
   sidebarFullHideEnabled?: boolean;
-  visualEffect?: 'off' | 'snow' | 'sakura' | 'rain';
   preventAutoScrollEnabled?: boolean;
   inputHaloHidden?: boolean;
   forkEnabled?: boolean;
@@ -463,7 +461,6 @@ export default function Popup() {
   const [draftAutoSaveEnabled, setDraftAutoSaveEnabled] = useState<boolean>(false);
   const [sidebarAutoHideEnabled, setSidebarAutoHideEnabled] = useState<boolean>(false);
   const [sidebarFullHideEnabled, setSidebarFullHideEnabled] = useState<boolean>(false);
-  const [visualEffect, setVisualEffect] = useState<'off' | 'snow' | 'sakura' | 'rain'>('off');
   const [preventAutoScrollEnabled, setPreventAutoScrollEnabled] = useState<boolean>(false);
   const [inputHaloHidden, setInputHaloHidden] = useState<boolean>(false);
   const [forkEnabled, setForkEnabled] = useState<boolean>(false);
@@ -584,11 +581,6 @@ export default function Popup() {
         payload.gvSidebarAutoHide = settings.sidebarAutoHideEnabled;
       if (typeof settings.sidebarFullHideEnabled === 'boolean')
         payload.gvSidebarFullHide = settings.sidebarFullHideEnabled;
-      if (settings.visualEffect) {
-        payload.gvVisualEffect = settings.visualEffect;
-        // Clear legacy key
-        payload.gvSnowEffect = false;
-      }
       if (typeof settings.preventAutoScrollEnabled === 'boolean')
         payload.gvPreventAutoScrollEnabled = settings.preventAutoScrollEnabled;
       if (typeof settings.inputHaloHidden === 'boolean')
@@ -953,8 +945,6 @@ export default function Popup() {
           [StorageKeys.DRAFT_AUTO_SAVE]: false,
           gvSidebarAutoHide: false,
           gvSidebarFullHide: false,
-          gvVisualEffect: 'off',
-          gvSnowEffect: false,
           gvPreventAutoScrollEnabled: false,
           [StorageKeys.INPUT_HALO_HIDDEN]: false,
           [StorageKeys.FORK_ENABLED]: false,
@@ -1020,19 +1010,6 @@ export default function Popup() {
           setDraftAutoSaveEnabled(res?.[StorageKeys.DRAFT_AUTO_SAVE] === true);
           setSidebarAutoHideEnabled(res?.gvSidebarAutoHide === true);
           setSidebarFullHideEnabled(res?.gvSidebarFullHide === true);
-          // Resolve visual effect: new key takes precedence over legacy boolean
-          const storedVisualEffect = res?.gvVisualEffect;
-          if (
-            storedVisualEffect === 'snow' ||
-            storedVisualEffect === 'sakura' ||
-            storedVisualEffect === 'rain'
-          ) {
-            setVisualEffect(storedVisualEffect);
-          } else if (res?.gvSnowEffect === true) {
-            setVisualEffect('snow');
-          } else {
-            setVisualEffect('off');
-          }
           setPreventAutoScrollEnabled(res?.gvPreventAutoScrollEnabled === true);
           setInputHaloHidden(res?.[StorageKeys.INPUT_HALO_HIDDEN] === true);
           setForkEnabled(res?.[StorageKeys.FORK_ENABLED] === true);
@@ -1352,7 +1329,6 @@ export default function Popup() {
         return !isSafariBrowser;
       case 'folderTreeIndent':
       case 'sidebarBehavior':
-      case 'visualEffect':
         return !isAIStudio;
       default:
         return true;
@@ -2107,135 +2083,6 @@ export default function Popup() {
                       apply({ sidebarFullHideEnabled: e.target.checked });
                     }}
                   />
-                </div>
-              </CardContent>
-            </Card>,
-          )}
-
-        {/* Visual Effect - Gemini only */}
-        {!isAIStudio &&
-          wrapSection(
-            'visualEffect',
-            <Card className="p-4 transition-all hover:shadow-md">
-              <CardContent className="p-0">
-                <div className="flex-1">
-                  <Label className="text-sm font-medium">{t('visualEffect')}</Label>
-                  <p className="text-muted-foreground mt-1 text-xs">{t('visualEffectHint')}</p>
-                </div>
-                <div className="bg-secondary/60 mt-3 flex items-center gap-0.5 rounded-full p-1">
-                  {(
-                    [
-                      {
-                        value: 'off' as const,
-                        label: t('visualEffectOff'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'snow' as const,
-                        label: t('visualEffectSnow'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="12" y1="2" x2="12" y2="22" />
-                            <line x1="2" y1="12" x2="22" y2="12" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                            <line x1="19.07" y1="4.93" x2="4.93" y2="19.07" />
-                            <line x1="12" y1="2" x2="14.5" y2="4.5" />
-                            <line x1="12" y1="2" x2="9.5" y2="4.5" />
-                            <line x1="12" y1="22" x2="14.5" y2="19.5" />
-                            <line x1="12" y1="22" x2="9.5" y2="19.5" />
-                            <line x1="2" y1="12" x2="4.5" y2="9.5" />
-                            <line x1="2" y1="12" x2="4.5" y2="14.5" />
-                            <line x1="22" y1="12" x2="19.5" y2="9.5" />
-                            <line x1="22" y1="12" x2="19.5" y2="14.5" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'sakura' as const,
-                        label: t('visualEffectSakura'),
-                        icon: (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <g transform="translate(12,12)">
-                              {[0, 72, 144, 216, 288].map((deg) => (
-                                <ellipse
-                                  key={deg}
-                                  cx="0"
-                                  cy="-6"
-                                  rx="2.8"
-                                  ry="5.5"
-                                  transform={`rotate(${deg})`}
-                                  opacity="0.85"
-                                />
-                              ))}
-                              <circle cx="0" cy="0" r="2" opacity="0.6" />
-                            </g>
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'rain' as const,
-                        label: t('visualEffectRain'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          >
-                            <line x1="8" y1="3" x2="6.5" y2="10" />
-                            <line x1="14" y1="2" x2="12.5" y2="9" />
-                            <line x1="20" y1="4" x2="18.5" y2="11" />
-                            <line x1="5" y1="12" x2="3.5" y2="19" />
-                            <line x1="11" y1="11" x2="9.5" y2="18" />
-                            <line x1="17" y1="13" x2="15.5" y2="20" />
-                          </svg>
-                        ),
-                      },
-                    ] as const
-                  ).map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setVisualEffect(option.value);
-                        apply({ visualEffect: option.value });
-                      }}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-full py-1.5 text-xs font-bold transition-all duration-200 ${
-                        visualEffect === option.value
-                          ? 'bg-background text-foreground shadow-md'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      {option.icon}
-                      <span>{option.label}</span>
-                    </button>
-                  ))}
                 </div>
               </CardContent>
             </Card>,

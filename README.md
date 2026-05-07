@@ -87,7 +87,6 @@ That's why I built **Voyager**. It's not just a tool; it's a companion that help
 - **💡 [Prompt Vault](https://voyager.nagi.fun/en/guide/prompts)**: Save and reuse prompts across Gemini, AI Studio, and [custom websites](https://voyager.nagi.fun/en/guide/custom-websites).
 - **☁️ [Cloud Sync](https://voyager.nagi.fun/en/guide/cloud-sync)**: Sync folders and prompts to Google Drive.
 - **📐 Formula Copy**: One-click copy for LaTeX and MathML (Word) source codes.
-- **🌦️ Visual Effects**: Add seasonal ambience with **snow**, **cinematic rain**, or **falling sakura petals** from the settings panel.
 
 ### ✨ Gemini Exclusive
 
@@ -105,12 +104,6 @@ That's why I built **Voyager**. It's not just a tool; it's a companion that help
   - **[Input Collapse](https://voyager.nagi.fun/en/guide/input-collapse)**: Auto-expandable input area for more reading space.
   - **[Default Model](https://voyager.nagi.fun/en/guide/default-model)**: Set your favorite model as default.
   - **[Hide Recent Items](https://voyager.nagi.fun/en/guide/recents-hider)**: Hide "Recent" list in the sidebar to reduce distraction.
-
-### 🎨 Personalization
-
-- Open the extension popup and find **Visual Effects** to switch between `Off`, `Snow`, `Sakura`, and `Rain`.
-- Effects are rendered as lightweight full-screen overlays and do not block page interaction.
-- When you switch effects or turn them off, existing particles drain out naturally instead of disappearing abruptly.
 
 ---
 

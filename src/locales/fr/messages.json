@@ -1611,30 +1611,6 @@
     "message": "Sites web consultés",
     "description": "En-tête de section des sites web recherchés de Deep Research"
   },
-  "visualEffect": {
-    "message": "Effets visuels",
-    "description": "Visual effect selector label"
-  },
-  "visualEffectHint": {
-    "message": "Ajoutez une ambiance saisonniere a la page",
-    "description": "Visual effect feature hint"
-  },
-  "visualEffectOff": {
-    "message": "Desactive",
-    "description": "Visual effect off option"
-  },
-  "visualEffectSnow": {
-    "message": "Neige",
-    "description": "Visual effect snow option"
-  },
-  "visualEffectSakura": {
-    "message": "Sakura",
-    "description": "Visual effect sakura option"
-  },
-  "visualEffectRain": {
-    "message": "Pluie",
-    "description": "Visual effect rain option"
-  },
   "changelog_title": {
     "message": "Nouveautés",
     "description": "Changelog modal title"

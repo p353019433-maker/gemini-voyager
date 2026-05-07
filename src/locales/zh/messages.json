@@ -1611,30 +1611,6 @@
     "message": "研究网站",
     "description": "深度研究已研究网站章节标题"
   },
-  "visualEffect": {
-    "message": "视觉特效",
-    "description": "Visual effect selector label"
-  },
-  "visualEffectHint": {
-    "message": "为页面增添季节氛围",
-    "description": "Visual effect feature hint"
-  },
-  "visualEffectOff": {
-    "message": "关闭",
-    "description": "Visual effect off option"
-  },
-  "visualEffectSnow": {
-    "message": "飘雪",
-    "description": "Visual effect snow option"
-  },
-  "visualEffectSakura": {
-    "message": "樱花",
-    "description": "Visual effect sakura option"
-  },
-  "visualEffectRain": {
-    "message": "雨",
-    "description": "Visual effect rain option"
-  },
   "changelog_title": {
     "message": "更新内容",
     "description": "Changelog modal title"

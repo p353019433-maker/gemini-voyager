@@ -1611,30 +1611,6 @@
     "message": "調査済みサイト",
     "description": "深層研究の調査済みウェブサイトセクションヘッダー"
   },
-  "visualEffect": {
-    "message": "ビジュアルエフェクト",
-    "description": "Visual effect selector label"
-  },
-  "visualEffectHint": {
-    "message": "ページに季節の雰囲気を演出",
-    "description": "Visual effect feature hint"
-  },
-  "visualEffectOff": {
-    "message": "オフ",
-    "description": "Visual effect off option"
-  },
-  "visualEffectSnow": {
-    "message": "雪",
-    "description": "Visual effect snow option"
-  },
-  "visualEffectSakura": {
-    "message": "桜",
-    "description": "Visual effect sakura option"
-  },
-  "visualEffectRain": {
-    "message": "雨",
-    "description": "Visual effect rain option"
-  },
   "changelog_title": {
     "message": "新機能",
     "description": "Changelog modal title"

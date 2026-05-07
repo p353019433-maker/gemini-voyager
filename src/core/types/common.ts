@@ -155,12 +155,6 @@ export const StorageKeys = {
   // (chat-window::before + .nl-canvas blobs). Default false (halo visible).
   INPUT_HALO_HIDDEN: 'gvInputHaloHidden',
 
-  // Snow effect (legacy, kept for backward compat migration)
-  GV_SNOW_EFFECT: 'gvSnowEffect',
-
-  // Visual effect (replaces GV_SNOW_EFFECT): 'off' | 'snow' | 'sakura'
-  GV_VISUAL_EFFECT: 'gvVisualEffect',
-
   // Changelog
   CHANGELOG_DISMISSED_VERSION: 'gvChangelogDismissedVersion',
   CHANGELOG_NOTIFY_MODE: 'gvChangelogNotifyMode',
