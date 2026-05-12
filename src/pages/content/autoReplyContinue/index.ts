@@ -3,6 +3,7 @@ import { buildConversationIdFromUrl } from '@/core/utils/conversationIdentity';
 import { isExtensionContextInvalidatedError } from '@/core/utils/extensionContext';
 import { getTranslationSyncUnsafe } from '@/utils/i18n';
 
+import { DEFAULT_ARMED_TTL_MINUTES } from './constants';
 import { showCountdownOverlay } from './countdownOverlay';
 import { startGenerationDetector } from './generationDetector';
 import { sendAutoReply } from './injector';
@@ -10,6 +11,8 @@ import { matchContinuePrompt, resolveReplyText } from './matcher';
 import {
   checkPolicy,
   createPolicyState,
+  normalizeArmedTtlMinutes,
+  pauseConversation,
   recordAutoReply,
   recordUserActivity,
 } from './policy';
@@ -21,6 +24,7 @@ interface Settings {
   countdownSec: number;
   customText: string;
   maxPerConversation: number;
+  armedTtlMinutes: number;
   customPatterns: readonly string[] | null;
 }
 
@@ -29,6 +33,7 @@ const DEFAULTS: Settings = {
   countdownSec: 3,
   customText: '',
   maxPerConversation: 10,
+  armedTtlMinutes: DEFAULT_ARMED_TTL_MINUTES,
   customPatterns: null,
 };
 
@@ -71,11 +76,12 @@ export async function startAutoReplyContinue(): Promise<() => void> {
     const match = matchContinuePrompt(responseText, { customPatterns: settings.customPatterns });
     if (!match.trigger) return;
 
+    const currentConversationKey = conversationKey();
     const decision = checkPolicy(policyState, {
       enabled: settings.enabled,
       maxPerConversation: settings.maxPerConversation,
-      conversationKey: conversationKey(),
-      documentHidden: document.visibilityState !== 'visible',
+      conversationKey: currentConversationKey,
+      armedTtlMinutes: settings.armedTtlMinutes,
     });
     if (!decision.allow) {
       console.log(LOG_PREFIX, 'skipped:', decision.reason);
@@ -96,11 +102,16 @@ export async function startAutoReplyContinue(): Promise<() => void> {
 
     const proceed = await result;
     activeCancel = null;
-    if (!proceed) return;
+    if (!proceed) {
+      // User cancellation is an explicit stop signal for this conversation.
+      // It remains paused until the user manually sends another message.
+      pauseConversation(policyState, currentConversationKey);
+      return;
+    }
 
     const sent = sendAutoReply(replyText);
     if (sent) {
-      recordAutoReply(policyState, conversationKey());
+      recordAutoReply(policyState, currentConversationKey);
     } else {
       console.warn(LOG_PREFIX, 'failed to send auto-reply (chat input or send button missing)');
     }
@@ -130,6 +141,7 @@ export async function startAutoReplyContinue(): Promise<() => void> {
             [StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]: 3,
             [StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT]: '',
             [StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]: 10,
+            [StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]: DEFAULT_ARMED_TTL_MINUTES,
             [StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]: null,
           },
           (res) => {
@@ -143,6 +155,9 @@ export async function startAutoReplyContinue(): Promise<() => void> {
               maxPerConversation: Math.max(
                 1,
                 Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]) || 10,
+              ),
+              armedTtlMinutes: normalizeArmedTtlMinutes(
+                res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES],
               ),
               customPatterns: parsePatterns(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]),
             };
@@ -158,20 +173,19 @@ export async function startAutoReplyContinue(): Promise<() => void> {
     });
   };
 
-  // Track manual user sends so that we only auto-continue conversations the
-  // user is actively engaged with. We listen for Enter/click on the send
-  // button area.
+  // Track manual user sends. A manual send arms the current conversation for
+  // auto-continuation until the user-configured TTL expires.
   const onUserActivity = (event: Event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.closest('button[aria-label*="Send" i], button[aria-label*="send" i]')) {
-      recordUserActivity(policyState);
+      recordUserActivity(policyState, conversationKey());
       return;
     }
     if (event instanceof KeyboardEvent && event.key === 'Enter' && !event.shiftKey) {
       const inEditable =
         target.isContentEditable || target.getAttribute('contenteditable') === 'true';
-      if (inEditable) recordUserActivity(policyState);
+      if (inEditable) recordUserActivity(policyState, conversationKey());
     }
   };
 
@@ -188,6 +202,7 @@ export async function startAutoReplyContinue(): Promise<() => void> {
       StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC,
       StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT,
       StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV,
+      StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES,
       StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS,
     ];
     if (!watched.some((key) => key in changes)) return;
