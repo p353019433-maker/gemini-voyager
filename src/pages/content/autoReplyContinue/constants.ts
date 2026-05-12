@@ -3,7 +3,7 @@
  *
  * Each entry is a regex source string (case-insensitive). They are tested
  * against the trailing slice of the most recent AI response. The tail must
- * also contain a question mark (Chinese '？' or ASCII '?') to qualify.
+ * also contain a question mark (Chinese '?' or ASCII '?') to qualify.
  */
 export const DEFAULT_TRIGGER_PATTERNS: readonly string[] = [
   // Chinese
@@ -41,11 +41,24 @@ export const SAFETY_BLOCKLIST: readonly string[] = [
   '重置',
   '密码',
   '账户',
+  '账号',
+  '付款',
+  '支付',
+  '购买',
+  '订阅',
+  '授权',
+  '确认操作',
   'delete',
   'remove',
   'reset',
   'password',
   'credential',
+  'account',
+  'payment',
+  'purchase',
+  'subscribe',
+  'authorize',
+  'confirm action',
 ];
 
 /** Number of trailing characters from the AI response we examine. */
@@ -57,8 +70,13 @@ export const DOM_QUIESCENCE_MS = 1500;
 /** Minimum gap between two consecutive auto-replies within one conversation. */
 export const MIN_INTERVAL_MS = 5000;
 
-/** Window in which a manual user send qualifies the conversation as "active". */
-export const USER_ACTIVITY_WINDOW_MS = 5 * 60 * 1000;
+/**
+ * How long a manual user send keeps the current conversation armed for
+ * auto-continuation. The user can override this from settings.
+ */
+export const DEFAULT_ARMED_TTL_MINUTES = 120;
+export const MIN_ARMED_TTL_MINUTES = 1;
+export const MAX_ARMED_TTL_MINUTES = 24 * 60;
 
 /** Default reply text per language. */
 export const DEFAULT_REPLY_TEXT_ZH = '继续';
