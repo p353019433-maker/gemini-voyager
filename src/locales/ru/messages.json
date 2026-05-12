@@ -1639,6 +1639,18 @@
     "message": "раз",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "Длительность авторизации",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "Каждое ручное сообщение авторизует эту беседу на указанное количество минут. По истечении автоответы прекращаются.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "мин",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "Текст ответа",
     "description": "Auto-Reply Continue reply text label"

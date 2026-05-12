@@ -1639,6 +1639,18 @@
     "message": "fois",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "Durée d'autorisation",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "Chaque envoi manuel autorise cette conversation pour ce nombre de minutes. Les réponses automatiques s'arrêtent à l'expiration.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "min",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "Texte de réponse",
     "description": "Auto-Reply Continue reply text label"

@@ -1639,6 +1639,18 @@
     "message": "veces",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "Duración de autorización",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "Cada envío manual autoriza esta conversación durante estos minutos. Las respuestas automáticas paran al expirar.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "min",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "Texto de respuesta",
     "description": "Auto-Reply Continue reply text label"

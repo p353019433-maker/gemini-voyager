@@ -1639,6 +1639,18 @@
     "message": "회",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "권한 유효 시간",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "수동으로 메시지를 보낼 때마다 해당 대화가 지정한 분 동안 권한을 얻습니다. 만료 후 자동 응답이 중지됩니다.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "분",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "응답 텍스트",
     "description": "Auto-Reply Continue reply text label"

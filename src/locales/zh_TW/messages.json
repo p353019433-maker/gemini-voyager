@@ -1639,6 +1639,18 @@
     "message": "次",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "授權時長",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "每次手動發送會為該對話授權此分鐘數。超時後自動續答停止。",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "分鐘",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "回覆文字",
     "description": "Auto-Reply Continue reply text label"

@@ -1639,6 +1639,18 @@
     "message": "مرة",
     "description": "Auto-Reply Continue max-per-conversation unit (times)"
   },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "مدة التفويض",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "كل إرسال يدوي يمنح هذه المحادثة تفويضاً لهذا العدد من الدقائق. تتوقف الردود التلقائية بعد انتهاء المهلة.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "د",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
   "autoReplyContinueTextLabel": {
     "message": "نص الرد",
     "description": "Auto-Reply Continue reply text label"

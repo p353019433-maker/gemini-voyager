@@ -357,6 +357,7 @@ interface SettingsUpdate {
   autoReplyContinueCountdownSec?: number;
   autoReplyContinueText?: string;
   autoReplyContinueMaxPerConv?: number;
+  autoReplyContinueArmTtlMinutes?: number;
   autoReplyContinuePatterns?: string;
 }
 
@@ -469,6 +470,8 @@ export default function Popup() {
   const [autoReplyContinueCountdownSec, setAutoReplyContinueCountdownSec] = useState<number>(3);
   const [autoReplyContinueText, setAutoReplyContinueText] = useState<string>('');
   const [autoReplyContinueMaxPerConv, setAutoReplyContinueMaxPerConv] = useState<number>(10);
+  const [autoReplyContinueArmTtlMinutes, setAutoReplyContinueArmTtlMinutes] =
+    useState<number>(120);
   const [autoReplyContinuePatterns, setAutoReplyContinuePatterns] = useState<string>('');
   const [sidebarAutoHideEnabled, setSidebarAutoHideEnabled] = useState<boolean>(false);
   const [sidebarFullHideEnabled, setSidebarFullHideEnabled] = useState<boolean>(false);
@@ -598,6 +601,9 @@ export default function Popup() {
       if (typeof settings.autoReplyContinueMaxPerConv === 'number')
         payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV] =
           settings.autoReplyContinueMaxPerConv;
+      if (typeof settings.autoReplyContinueArmTtlMinutes === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES] =
+          settings.autoReplyContinueArmTtlMinutes;
       if (typeof settings.autoReplyContinuePatterns === 'string') {
         const lines = settings.autoReplyContinuePatterns
           .split('\n')
@@ -975,6 +981,7 @@ export default function Popup() {
           [StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]: 3,
           [StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT]: '',
           [StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]: 10,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]: 120,
           [StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]: null,
           gvSidebarAutoHide: false,
           gvSidebarFullHide: false,
@@ -1050,6 +1057,12 @@ export default function Popup() {
           {
             const max = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]);
             setAutoReplyContinueMaxPerConv(Number.isFinite(max) && max >= 1 ? max : 10);
+          }
+          {
+            const ttl = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]);
+            setAutoReplyContinueArmTtlMinutes(
+              Number.isFinite(ttl) && ttl >= 1 && ttl <= 1440 ? Math.round(ttl) : 120,
+            );
           }
           {
             const patterns = res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS];
@@ -2277,6 +2290,38 @@ export default function Popup() {
                         />
                         <span className="text-muted-foreground text-xs">
                           {t('autoReplyContinueMaxPerConvUnit')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <Label
+                          htmlFor="auto-reply-continue-arm-ttl"
+                          className="text-sm font-medium"
+                        >
+                          {t('autoReplyContinueArmTtlLabel')}
+                        </Label>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {t('autoReplyContinueArmTtlHint')}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="auto-reply-continue-arm-ttl"
+                          type="number"
+                          min={1}
+                          max={1440}
+                          value={autoReplyContinueArmTtlMinutes}
+                          onChange={(e) => {
+                            const v = Math.max(1, Math.min(1440, Number(e.target.value) || 120));
+                            setAutoReplyContinueArmTtlMinutes(v);
+                            apply({ autoReplyContinueArmTtlMinutes: v });
+                          }}
+                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                        />
+                        <span className="text-muted-foreground text-xs">
+                          {t('autoReplyContinueArmTtlUnit')}
                         </span>
                       </div>
                     </div>
