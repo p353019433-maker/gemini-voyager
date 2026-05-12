@@ -189,6 +189,7 @@ export const StorageKeys = {
   GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC: 'gvAutoReplyContinueCountdownSec',
   GV_AUTO_REPLY_CONTINUE_TEXT: 'gvAutoReplyContinueText',
   GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV: 'gvAutoReplyContinueMaxPerConv',
+  GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES: 'gvAutoReplyContinueArmTtlMinutes',
   GV_AUTO_REPLY_CONTINUE_PATTERNS: 'gvAutoReplyContinuePatterns',
 } as const;
 
