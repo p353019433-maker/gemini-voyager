@@ -1611,6 +1611,54 @@
     "message": "調査済みサイト",
     "description": "深層研究の調査済みウェブサイトセクションヘッダー"
   },
+  "autoReplyContinue": {
+    "message": "自動継続返信",
+    "description": "Auto-Reply Continue section title"
+  },
+  "autoReplyContinueHint": {
+    "message": "Gemini が「続けますか？」と尋ねたときに自動で「続けて」と返信します",
+    "description": "Auto-Reply Continue hint text"
+  },
+  "autoReplyContinueEnabled": {
+    "message": "有効にする",
+    "description": "Auto-Reply Continue enable toggle label"
+  },
+  "autoReplyContinueCountdownLabel": {
+    "message": "カウントダウン",
+    "description": "Auto-Reply Continue countdown label"
+  },
+  "autoReplyContinueCountdownUnit": {
+    "message": "秒",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
+  },
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "1 会話あたりの上限",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "回",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "返信テキスト",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "空欄時は言語に合わせて自動選択",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "カスタム キーワード（1 行 1 件）",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "{n} 秒後に自動返信、Esc でキャンセル",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "キャンセル",
+    "description": "Auto-Reply Continue overlay cancel button"
+  },
   "changelog_title": {
     "message": "新機能",
     "description": "Changelog modal title"

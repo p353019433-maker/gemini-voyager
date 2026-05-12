@@ -1611,6 +1611,54 @@
     "message": "Исследованные сайты",
     "description": "Заголовок раздела исследованных сайтов Deep Research"
   },
+  "autoReplyContinue": {
+    "message": "Автопродолжение",
+    "description": "Auto-Reply Continue section title"
+  },
+  "autoReplyContinueHint": {
+    "message": "Когда Gemini спрашивает «продолжить?», расширение автоматически отвечает за вас.",
+    "description": "Auto-Reply Continue hint text"
+  },
+  "autoReplyContinueEnabled": {
+    "message": "Включить",
+    "description": "Auto-Reply Continue enable toggle label"
+  },
+  "autoReplyContinueCountdownLabel": {
+    "message": "Обратный отсчёт",
+    "description": "Auto-Reply Continue countdown label"
+  },
+  "autoReplyContinueCountdownUnit": {
+    "message": "с",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
+  },
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "Макс. на диалог",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "раз",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "Текст ответа",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "Пусто — использовать значение по умолчанию для языка",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "Пользовательские ключевые слова (по одному на строку)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "Автоответ через {n}с — Esc для отмены",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "Отмена",
+    "description": "Auto-Reply Continue overlay cancel button"
+  },
   "changelog_title": {
     "message": "Что нового",
     "description": "Changelog modal title"

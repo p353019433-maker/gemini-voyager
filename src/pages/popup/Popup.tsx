@@ -70,6 +70,7 @@ const POPUP_SECTION_IDS = [
   'sidebarBehavior',
   'formulaCopy',
   'keyboardShortcuts',
+  'autoReplyContinue',
   'inputCollapse',
   'promptManager',
   'general',
@@ -352,6 +353,11 @@ interface SettingsUpdate {
   aiStudioEnabled?: boolean;
   showMessageTimestamps?: boolean;
   folderProjectEnabled?: boolean;
+  autoReplyContinueEnabled?: boolean;
+  autoReplyContinueCountdownSec?: number;
+  autoReplyContinueText?: string;
+  autoReplyContinueMaxPerConv?: number;
+  autoReplyContinuePatterns?: string;
 }
 
 function SectionReorderControls({
@@ -459,6 +465,11 @@ export default function Popup() {
   const [aiStudioEnterSendEnabled, setAiStudioEnterSendEnabled] = useState<boolean>(false);
   const [safariEnterFixEnabled, setSafariEnterFixEnabled] = useState<boolean>(false);
   const [draftAutoSaveEnabled, setDraftAutoSaveEnabled] = useState<boolean>(false);
+  const [autoReplyContinueEnabled, setAutoReplyContinueEnabled] = useState<boolean>(false);
+  const [autoReplyContinueCountdownSec, setAutoReplyContinueCountdownSec] = useState<number>(3);
+  const [autoReplyContinueText, setAutoReplyContinueText] = useState<string>('');
+  const [autoReplyContinueMaxPerConv, setAutoReplyContinueMaxPerConv] = useState<number>(10);
+  const [autoReplyContinuePatterns, setAutoReplyContinuePatterns] = useState<string>('');
   const [sidebarAutoHideEnabled, setSidebarAutoHideEnabled] = useState<boolean>(false);
   const [sidebarFullHideEnabled, setSidebarFullHideEnabled] = useState<boolean>(false);
   const [preventAutoScrollEnabled, setPreventAutoScrollEnabled] = useState<boolean>(false);
@@ -577,6 +588,23 @@ export default function Popup() {
         payload[StorageKeys.SAFARI_ENTER_FIX] = settings.safariEnterFixEnabled;
       if (typeof settings.draftAutoSaveEnabled === 'boolean')
         payload[StorageKeys.DRAFT_AUTO_SAVE] = settings.draftAutoSaveEnabled;
+      if (typeof settings.autoReplyContinueEnabled === 'boolean')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED] = settings.autoReplyContinueEnabled;
+      if (typeof settings.autoReplyContinueCountdownSec === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC] =
+          settings.autoReplyContinueCountdownSec;
+      if (typeof settings.autoReplyContinueText === 'string')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT] = settings.autoReplyContinueText;
+      if (typeof settings.autoReplyContinueMaxPerConv === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV] =
+          settings.autoReplyContinueMaxPerConv;
+      if (typeof settings.autoReplyContinuePatterns === 'string') {
+        const lines = settings.autoReplyContinuePatterns
+          .split('\n')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS] = lines.length > 0 ? lines : null;
+      }
       if (typeof settings.sidebarAutoHideEnabled === 'boolean')
         payload.gvSidebarAutoHide = settings.sidebarAutoHideEnabled;
       if (typeof settings.sidebarFullHideEnabled === 'boolean')
@@ -943,6 +971,11 @@ export default function Popup() {
           [StorageKeys.AISTUDIO_ENTER_SEND]: false,
           [StorageKeys.SAFARI_ENTER_FIX]: false,
           [StorageKeys.DRAFT_AUTO_SAVE]: false,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED]: false,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]: 3,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT]: '',
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]: 10,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]: null,
           gvSidebarAutoHide: false,
           gvSidebarFullHide: false,
           gvPreventAutoScrollEnabled: false,
@@ -1008,6 +1041,24 @@ export default function Popup() {
           setAiStudioEnterSendEnabled(res?.[StorageKeys.AISTUDIO_ENTER_SEND] === true);
           setSafariEnterFixEnabled(res?.[StorageKeys.SAFARI_ENTER_FIX] === true);
           setDraftAutoSaveEnabled(res?.[StorageKeys.DRAFT_AUTO_SAVE] === true);
+          setAutoReplyContinueEnabled(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED] === true);
+          {
+            const sec = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]);
+            setAutoReplyContinueCountdownSec(Number.isFinite(sec) && sec >= 1 ? sec : 3);
+          }
+          setAutoReplyContinueText(String(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT] ?? ''));
+          {
+            const max = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]);
+            setAutoReplyContinueMaxPerConv(Number.isFinite(max) && max >= 1 ? max : 10);
+          }
+          {
+            const patterns = res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS];
+            if (Array.isArray(patterns)) {
+              setAutoReplyContinuePatterns(patterns.filter((p) => typeof p === 'string').join('\n'));
+            } else {
+              setAutoReplyContinuePatterns('');
+            }
+          }
           setSidebarAutoHideEnabled(res?.gvSidebarAutoHide === true);
           setSidebarFullHideEnabled(res?.gvSidebarFullHide === true);
           setPreventAutoScrollEnabled(res?.gvPreventAutoScrollEnabled === true);
@@ -1329,6 +1380,7 @@ export default function Popup() {
         return !isSafariBrowser;
       case 'folderTreeIndent':
       case 'sidebarBehavior':
+      case 'autoReplyContinue':
         return !isAIStudio;
       default:
         return true;
@@ -2147,6 +2199,131 @@ export default function Popup() {
 
         {/* Keyboard Shortcuts */}
         {wrapSection('keyboardShortcuts', <KeyboardShortcutSettings />)}
+
+        {/* Auto-Reply Continue - Gemini only */}
+        {!isAIStudio &&
+          wrapSection(
+            'autoReplyContinue',
+            <Card className="p-4 transition-all hover:shadow-md">
+              <CardTitle className="mb-4">{t('autoReplyContinue')}</CardTitle>
+              <CardContent className="space-y-4 p-0">
+                <p className="text-muted-foreground text-xs">{t('autoReplyContinueHint')}</p>
+                <div className="group flex items-center justify-between">
+                  <Label
+                    htmlFor="auto-reply-continue-enabled"
+                    className="group-hover:text-primary cursor-pointer text-sm font-medium transition-colors"
+                  >
+                    {t('autoReplyContinueEnabled')}
+                  </Label>
+                  <Switch
+                    id="auto-reply-continue-enabled"
+                    checked={autoReplyContinueEnabled}
+                    onChange={(e) => {
+                      setAutoReplyContinueEnabled(e.target.checked);
+                      apply({ autoReplyContinueEnabled: e.target.checked });
+                    }}
+                  />
+                </div>
+
+                {autoReplyContinueEnabled && (
+                  <>
+                    <div className="flex items-center justify-between gap-3">
+                      <Label
+                        htmlFor="auto-reply-continue-countdown"
+                        className="text-sm font-medium"
+                      >
+                        {t('autoReplyContinueCountdownLabel')}
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="auto-reply-continue-countdown"
+                          type="number"
+                          min={1}
+                          max={30}
+                          value={autoReplyContinueCountdownSec}
+                          onChange={(e) => {
+                            const v = Math.max(1, Math.min(30, Number(e.target.value) || 3));
+                            setAutoReplyContinueCountdownSec(v);
+                            apply({ autoReplyContinueCountdownSec: v });
+                          }}
+                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                        />
+                        <span className="text-muted-foreground text-xs">
+                          {t('autoReplyContinueCountdownUnit')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-3">
+                      <Label
+                        htmlFor="auto-reply-continue-max"
+                        className="text-sm font-medium"
+                      >
+                        {t('autoReplyContinueMaxPerConvLabel')}
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="auto-reply-continue-max"
+                          type="number"
+                          min={1}
+                          max={100}
+                          value={autoReplyContinueMaxPerConv}
+                          onChange={(e) => {
+                            const v = Math.max(1, Math.min(100, Number(e.target.value) || 10));
+                            setAutoReplyContinueMaxPerConv(v);
+                            apply({ autoReplyContinueMaxPerConv: v });
+                          }}
+                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                        />
+                        <span className="text-muted-foreground text-xs">
+                          {t('autoReplyContinueMaxPerConvUnit')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="auto-reply-continue-text"
+                        className="mb-2 block text-sm font-medium"
+                      >
+                        {t('autoReplyContinueTextLabel')}
+                      </Label>
+                      <input
+                        id="auto-reply-continue-text"
+                        type="text"
+                        value={autoReplyContinueText}
+                        placeholder={t('autoReplyContinueTextPlaceholder')}
+                        onChange={(e) => {
+                          setAutoReplyContinueText(e.target.value);
+                          apply({ autoReplyContinueText: e.target.value });
+                        }}
+                        className="border-input placeholder:text-muted-foreground flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="auto-reply-continue-patterns"
+                        className="mb-2 block text-sm font-medium"
+                      >
+                        {t('autoReplyContinuePatternsLabel')}
+                      </Label>
+                      <textarea
+                        id="auto-reply-continue-patterns"
+                        value={autoReplyContinuePatterns}
+                        onChange={(e) => {
+                          setAutoReplyContinuePatterns(e.target.value);
+                          apply({ autoReplyContinuePatterns: e.target.value });
+                        }}
+                        rows={3}
+                        className="border-input placeholder:text-muted-foreground flex w-full rounded-md border bg-transparent px-3 py-2 text-xs shadow-sm"
+                      />
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>,
+          )}
 
         {/* Input Collapse Options */}
         {wrapSection(

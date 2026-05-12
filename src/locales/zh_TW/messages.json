@@ -1611,6 +1611,54 @@
     "message": "研究網站",
     "description": "深度研究已研究網站章節標題"
   },
+  "autoReplyContinue": {
+    "message": "自動續答",
+    "description": "Auto-Reply Continue section title"
+  },
+  "autoReplyContinueHint": {
+    "message": "AI 詢問「是否繼續」時，自動代你回覆「繼續」",
+    "description": "Auto-Reply Continue hint text"
+  },
+  "autoReplyContinueEnabled": {
+    "message": "啟用",
+    "description": "Auto-Reply Continue enable toggle label"
+  },
+  "autoReplyContinueCountdownLabel": {
+    "message": "倒數",
+    "description": "Auto-Reply Continue countdown label"
+  },
+  "autoReplyContinueCountdownUnit": {
+    "message": "秒",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
+  },
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "單對話上限",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "次",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "回覆文字",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "留空時依語言自動選擇",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "自訂觸發關鍵字（每行一條）",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "{n} 秒後自動回覆，按 Esc 取消",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "取消",
+    "description": "Auto-Reply Continue overlay cancel button"
+  },
   "changelog_title": {
     "message": "更新內容",
     "description": "Changelog modal title"

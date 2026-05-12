@@ -1611,6 +1611,54 @@
     "message": "Sitios web investigados",
     "description": "Encabezado de sección de sitios web investigados de Deep Research"
   },
+  "autoReplyContinue": {
+    "message": "Continuar Automáticamente",
+    "description": "Auto-Reply Continue section title"
+  },
+  "autoReplyContinueHint": {
+    "message": "Cuando Gemini pregunte si debe continuar, responde automáticamente por ti.",
+    "description": "Auto-Reply Continue hint text"
+  },
+  "autoReplyContinueEnabled": {
+    "message": "Activar",
+    "description": "Auto-Reply Continue enable toggle label"
+  },
+  "autoReplyContinueCountdownLabel": {
+    "message": "Cuenta atrás",
+    "description": "Auto-Reply Continue countdown label"
+  },
+  "autoReplyContinueCountdownUnit": {
+    "message": "s",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
+  },
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "Máximo por conversación",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "veces",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "Texto de respuesta",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "Dejar vacío para usar el predeterminado por idioma",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "Palabras clave personalizadas (una por línea)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "Respuesta automática en {n}s — Esc para cancelar",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "Cancelar",
+    "description": "Auto-Reply Continue overlay cancel button"
+  },
   "changelog_title": {
     "message": "Novedades",
     "description": "Changelog modal title"

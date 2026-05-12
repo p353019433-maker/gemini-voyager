@@ -8,6 +8,7 @@ import { isGeminiEnterpriseEnvironment } from '@/core/utils/gemini';
 import { startFormulaCopy } from '@/features/formulaCopy';
 import { initI18n } from '@/utils/i18n';
 
+import { startAutoReplyContinue } from './autoReplyContinue/index';
 import { startCanvasExport } from './canvasExport/index';
 import { startChangelog } from './changelog/index';
 import { startChatFontSizeAdjuster } from './chatFontSize/index';
@@ -84,6 +85,7 @@ let sendBehaviorCleanup: (() => void) | null = null;
 let draftSaveCleanup: (() => void) | null = null;
 let forkCleanup: (() => void) | null = null;
 let gemsSidebarCleanup: (() => void) | null = null;
+let autoReplyContinueCleanup: (() => void) | null = null;
 
 async function isForkFeatureEnabled(): Promise<boolean> {
   try {
@@ -297,6 +299,10 @@ async function initializeFeatures(): Promise<void> {
       }
 
       startChangelog();
+      await delay(LIGHT_FEATURE_INIT_DELAY);
+
+      // Auto-reply to "continue?" prompts (Gemini only; opt-in)
+      autoReplyContinueCleanup = await startAutoReplyContinue();
       await delay(LIGHT_FEATURE_INIT_DELAY);
     }
 
@@ -532,6 +538,10 @@ function handleVisibilityChange(): void {
         if (gemsSidebarCleanup) {
           gemsSidebarCleanup();
           gemsSidebarCleanup = null;
+        }
+        if (autoReplyContinueCleanup) {
+          autoReplyContinueCleanup();
+          autoReplyContinueCleanup = null;
         }
         chrome.storage?.onChanged?.removeListener(onStorageChanged);
       } catch (e) {

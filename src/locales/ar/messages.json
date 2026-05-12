@@ -1611,6 +1611,54 @@
     "message": "المواقع المبحوثة",
     "description": "عنوان قسم المواقع المبحوثة في Deep Research"
   },
+  "autoReplyContinue": {
+    "message": "الرد التلقائي بالمتابعة",
+    "description": "Auto-Reply Continue section title"
+  },
+  "autoReplyContinueHint": {
+    "message": "عندما يسأل Gemini عمّا إذا كان عليه المتابعة، يرد نيابةً عنك تلقائياً.",
+    "description": "Auto-Reply Continue hint text"
+  },
+  "autoReplyContinueEnabled": {
+    "message": "تفعيل",
+    "description": "Auto-Reply Continue enable toggle label"
+  },
+  "autoReplyContinueCountdownLabel": {
+    "message": "العد التنازلي",
+    "description": "Auto-Reply Continue countdown label"
+  },
+  "autoReplyContinueCountdownUnit": {
+    "message": "ث",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
+  },
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "الحد لكل محادثة",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "مرة",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "نص الرد",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "اتركه فارغاً لاستخدام الافتراضي حسب اللغة",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "كلمات مفتاحية مخصصة (واحدة في كل سطر)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "رد تلقائي خلال {n} ث — اضغط Esc للإلغاء",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "إلغاء",
+    "description": "Auto-Reply Continue overlay cancel button"
+  },
   "changelog_title": {
     "message": "الجديد",
     "description": "Changelog modal title"

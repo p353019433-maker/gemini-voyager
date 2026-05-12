@@ -183,6 +183,13 @@ export const StorageKeys = {
   // Folder as Project
   FOLDER_PROJECT_ENABLED: 'gvFolderProjectEnabled',
   FOLDER_PROJECT_PENDING_FOLDER_ID: 'gvFolderProjectPendingFolderId',
+
+  // Auto-reply to "continue?" prompts (Gemini only)
+  GV_AUTO_REPLY_CONTINUE_ENABLED: 'gvAutoReplyContinueEnabled',
+  GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC: 'gvAutoReplyContinueCountdownSec',
+  GV_AUTO_REPLY_CONTINUE_TEXT: 'gvAutoReplyContinueText',
+  GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV: 'gvAutoReplyContinueMaxPerConv',
+  GV_AUTO_REPLY_CONTINUE_PATTERNS: 'gvAutoReplyContinuePatterns',
 } as const;
 
 export type StorageKey = (typeof StorageKeys)[keyof typeof StorageKeys];
