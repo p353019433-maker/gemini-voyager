@@ -1656,12 +1656,20 @@
     "description": "Auto-Reply Continue reply text label"
   },
   "autoReplyContinueTextPlaceholder": {
-    "message": "Пусто — использовать значение по умолчанию для языка",
+    "message": "Пусто (по умолчанию: 继续 / continue)",
     "description": "Auto-Reply Continue reply text placeholder"
   },
   "autoReplyContinuePatternsLabel": {
     "message": "Пользовательские ключевые слова (по одному на строку)",
     "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "Дополнительно",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
   },
   "autoReplyContinueOverlayMessage": {
     "message": "Автоответ через {n}с — Esc для отмены",

@@ -1656,12 +1656,20 @@
     "description": "Auto-Reply Continue reply text label"
   },
   "autoReplyContinueTextPlaceholder": {
-    "message": "留空则按语言自动选择",
+    "message": "留空（默认：继续 / continue）",
     "description": "Auto-Reply Continue reply text placeholder"
   },
   "autoReplyContinuePatternsLabel": {
     "message": "自定义触发关键词（每行一条）",
     "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "高级",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
   },
   "autoReplyContinueOverlayMessage": {
     "message": "{n} 秒后自动回复，按 Esc 取消",

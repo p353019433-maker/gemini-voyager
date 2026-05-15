@@ -1656,12 +1656,20 @@
     "description": "Auto-Reply Continue reply text label"
   },
   "autoReplyContinueTextPlaceholder": {
-    "message": "Dejar vacío para usar el predeterminado por idioma",
+    "message": "Dejar vacío (predet.: 继续 / continue)",
     "description": "Auto-Reply Continue reply text placeholder"
   },
   "autoReplyContinuePatternsLabel": {
     "message": "Palabras clave personalizadas (una por línea)",
     "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "Avanzado",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
   },
   "autoReplyContinueOverlayMessage": {
     "message": "Respuesta automática en {n}s — Esc para cancelar",

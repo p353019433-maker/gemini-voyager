@@ -1656,12 +1656,20 @@
     "description": "Auto-Reply Continue reply text label"
   },
   "autoReplyContinueTextPlaceholder": {
-    "message": "비워두면 언어에 따라 자동 선택",
+    "message": "비워두면 기본값 (계속 / continue)",
     "description": "Auto-Reply Continue reply text placeholder"
   },
   "autoReplyContinuePatternsLabel": {
     "message": "사용자 정의 키워드 (한 줄에 하나)",
     "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "고급",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
   },
   "autoReplyContinueOverlayMessage": {
     "message": "{n}초 후 자동 응답, Esc로 취소",

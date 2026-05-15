@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import browser from 'webextension-polyfill';
 
@@ -427,6 +427,81 @@ function SectionReorderControls({
         </svg>
       </button>
     </div>
+  );
+}
+
+/**
+ * A controlled-but-forgiving numeric input.
+ *
+ * Tracks the user's literal keystrokes in a local string draft so they can
+ * fully clear the field (or pass through transient invalid states while
+ * typing a longer number) without the value snapping back to a clamped
+ * default. The clamp + commit only runs on blur or Enter; external changes
+ * to `value` are mirrored into the draft only while the field is unfocused.
+ */
+function NumberFieldInput({
+  id,
+  value,
+  min,
+  max,
+  fallback,
+  onCommit,
+  className,
+}: {
+  id: string;
+  value: number;
+  min: number;
+  max: number;
+  fallback: number;
+  onCommit: (next: number) => void;
+  className?: string;
+}) {
+  const [draft, setDraft] = useState<string>(String(value));
+  const focusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!focusedRef.current) {
+      setDraft(String(value));
+    }
+  }, [value]);
+
+  const commit = () => {
+    const trimmed = draft.trim();
+    let next: number;
+    if (trimmed === '') {
+      next = fallback;
+    } else {
+      const parsed = Number(trimmed);
+      next = Number.isFinite(parsed) ? parsed : fallback;
+    }
+    next = Math.max(min, Math.min(max, Math.round(next)));
+    setDraft(String(next));
+    if (next !== value) onCommit(next);
+  };
+
+  return (
+    <input
+      id={id}
+      type="number"
+      inputMode="numeric"
+      min={min}
+      max={max}
+      value={draft}
+      onFocus={() => {
+        focusedRef.current = true;
+      }}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={() => {
+        focusedRef.current = false;
+        commit();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          (e.target as HTMLInputElement).blur();
+        }
+      }}
+      className={className}
+    />
   );
 }
 
@@ -2248,14 +2323,13 @@ export default function Popup() {
                         {t('autoReplyContinueCountdownLabel')}
                       </Label>
                       <div className="flex items-center gap-2">
-                        <input
+                        <NumberFieldInput
                           id="auto-reply-continue-countdown"
-                          type="number"
+                          value={autoReplyContinueCountdownSec}
                           min={1}
                           max={30}
-                          value={autoReplyContinueCountdownSec}
-                          onChange={(e) => {
-                            const v = Math.max(1, Math.min(30, Number(e.target.value) || 3));
+                          fallback={3}
+                          onCommit={(v) => {
                             setAutoReplyContinueCountdownSec(v);
                             apply({ autoReplyContinueCountdownSec: v });
                           }}
@@ -2263,65 +2337,6 @@ export default function Popup() {
                         />
                         <span className="text-muted-foreground text-xs">
                           {t('autoReplyContinueCountdownUnit')}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3">
-                      <Label
-                        htmlFor="auto-reply-continue-max"
-                        className="text-sm font-medium"
-                      >
-                        {t('autoReplyContinueMaxPerConvLabel')}
-                      </Label>
-                      <div className="flex items-center gap-2">
-                        <input
-                          id="auto-reply-continue-max"
-                          type="number"
-                          min={1}
-                          max={100}
-                          value={autoReplyContinueMaxPerConv}
-                          onChange={(e) => {
-                            const v = Math.max(1, Math.min(100, Number(e.target.value) || 10));
-                            setAutoReplyContinueMaxPerConv(v);
-                            apply({ autoReplyContinueMaxPerConv: v });
-                          }}
-                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
-                        />
-                        <span className="text-muted-foreground text-xs">
-                          {t('autoReplyContinueMaxPerConvUnit')}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <Label
-                          htmlFor="auto-reply-continue-arm-ttl"
-                          className="text-sm font-medium"
-                        >
-                          {t('autoReplyContinueArmTtlLabel')}
-                        </Label>
-                        <p className="text-muted-foreground mt-1 text-xs">
-                          {t('autoReplyContinueArmTtlHint')}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <input
-                          id="auto-reply-continue-arm-ttl"
-                          type="number"
-                          min={1}
-                          max={1440}
-                          value={autoReplyContinueArmTtlMinutes}
-                          onChange={(e) => {
-                            const v = Math.max(1, Math.min(1440, Number(e.target.value) || 120));
-                            setAutoReplyContinueArmTtlMinutes(v);
-                            apply({ autoReplyContinueArmTtlMinutes: v });
-                          }}
-                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
-                        />
-                        <span className="text-muted-foreground text-xs">
-                          {t('autoReplyContinueArmTtlUnit')}
                         </span>
                       </div>
                     </div>
@@ -2346,24 +2361,105 @@ export default function Popup() {
                       />
                     </div>
 
-                    <div>
-                      <Label
-                        htmlFor="auto-reply-continue-patterns"
-                        className="mb-2 block text-sm font-medium"
-                      >
-                        {t('autoReplyContinuePatternsLabel')}
-                      </Label>
-                      <textarea
-                        id="auto-reply-continue-patterns"
-                        value={autoReplyContinuePatterns}
-                        onChange={(e) => {
-                          setAutoReplyContinuePatterns(e.target.value);
-                          apply({ autoReplyContinuePatterns: e.target.value });
-                        }}
-                        rows={3}
-                        className="border-input placeholder:text-muted-foreground flex w-full rounded-md border bg-transparent px-3 py-2 text-xs shadow-sm"
-                      />
-                    </div>
+                    <details className="border-border/60 group/adv rounded-md border px-3 py-2">
+                      <summary className="cursor-pointer text-sm font-medium select-none [&::-webkit-details-marker]:hidden">
+                        <span className="inline-flex items-center gap-1.5">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="transition-transform group-open/adv:rotate-90"
+                          >
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                          {t('autoReplyContinueAdvancedLabel')}
+                        </span>
+                      </summary>
+                      <div className="mt-3 space-y-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <Label
+                            htmlFor="auto-reply-continue-max"
+                            className="text-sm font-medium"
+                          >
+                            {t('autoReplyContinueMaxPerConvLabel')}
+                          </Label>
+                          <div className="flex items-center gap-2">
+                            <NumberFieldInput
+                              id="auto-reply-continue-max"
+                              value={autoReplyContinueMaxPerConv}
+                              min={1}
+                              max={100}
+                              fallback={10}
+                              onCommit={(v) => {
+                                setAutoReplyContinueMaxPerConv(v);
+                                apply({ autoReplyContinueMaxPerConv: v });
+                              }}
+                              className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                              {t('autoReplyContinueMaxPerConvUnit')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1">
+                            <Label
+                              htmlFor="auto-reply-continue-arm-ttl"
+                              className="text-sm font-medium"
+                            >
+                              {t('autoReplyContinueArmTtlLabel')}
+                            </Label>
+                            <p className="text-muted-foreground mt-1 text-xs">
+                              {t('autoReplyContinueArmTtlHint')}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <NumberFieldInput
+                              id="auto-reply-continue-arm-ttl"
+                              value={autoReplyContinueArmTtlMinutes}
+                              min={1}
+                              max={1440}
+                              fallback={120}
+                              onCommit={(v) => {
+                                setAutoReplyContinueArmTtlMinutes(v);
+                                apply({ autoReplyContinueArmTtlMinutes: v });
+                              }}
+                              className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                              {t('autoReplyContinueArmTtlUnit')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label
+                            htmlFor="auto-reply-continue-patterns"
+                            className="mb-2 block text-sm font-medium"
+                          >
+                            {t('autoReplyContinuePatternsLabel')}
+                          </Label>
+                          <textarea
+                            id="auto-reply-continue-patterns"
+                            value={autoReplyContinuePatterns}
+                            placeholder={t('autoReplyContinuePatternsPlaceholder')}
+                            spellCheck={false}
+                            onChange={(e) => {
+                              setAutoReplyContinuePatterns(e.target.value);
+                              apply({ autoReplyContinuePatterns: e.target.value });
+                            }}
+                            rows={5}
+                            className="border-input placeholder:text-muted-foreground/70 flex w-full rounded-md border bg-transparent px-3 py-2 font-mono text-xs leading-relaxed shadow-sm"
+                          />
+                        </div>
+                      </div>
+                    </details>
                   </>
                 )}
               </CardContent>
