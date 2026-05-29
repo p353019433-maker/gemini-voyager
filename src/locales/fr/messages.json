@@ -1667,29 +1667,73 @@
     "message": "Sites web consultés",
     "description": "En-tête de section des sites web recherchés de Deep Research"
   },
-  "visualEffect": {
-    "message": "Effets visuels",
-    "description": "Visual effect selector label"
+  "autoReplyContinue": {
+    "message": "Réponse Continue Automatique",
+    "description": "Auto-Reply Continue section title"
   },
-  "visualEffectHint": {
-    "message": "Ajoutez une ambiance saisonniere a la page",
-    "description": "Visual effect feature hint"
+  "autoReplyContinueHint": {
+    "message": "Quand Gemini demande s'il faut continuer, répond automatiquement à votre place.",
+    "description": "Auto-Reply Continue hint text"
   },
-  "visualEffectOff": {
-    "message": "Desactive",
-    "description": "Visual effect off option"
+  "autoReplyContinueEnabled": {
+    "message": "Activer",
+    "description": "Auto-Reply Continue enable toggle label"
   },
-  "visualEffectSnow": {
-    "message": "Neige",
-    "description": "Visual effect snow option"
+  "autoReplyContinueCountdownLabel": {
+    "message": "Compte à rebours",
+    "description": "Auto-Reply Continue countdown label"
   },
-  "visualEffectSakura": {
-    "message": "Sakura",
-    "description": "Visual effect sakura option"
+  "autoReplyContinueCountdownUnit": {
+    "message": "s",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
   },
-  "visualEffectRain": {
-    "message": "Pluie",
-    "description": "Visual effect rain option"
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "Max par conversation",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "fois",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "Durée d'autorisation",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "Chaque envoi manuel autorise cette conversation pour ce nombre de minutes. Les réponses automatiques s'arrêtent à l'expiration.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "min",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "Texte de réponse",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "Laisser vide (défaut : 继续 / continue)",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "Mots-clés personnalisés (un par ligne)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "Avancé",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "Réponse automatique dans {n}s — Esc pour annuler",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "Annuler",
+    "description": "Auto-Reply Continue overlay cancel button"
   },
   "changelog_title": {
     "message": "Nouveautés",

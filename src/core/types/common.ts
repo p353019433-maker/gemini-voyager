@@ -167,12 +167,6 @@ export const StorageKeys = {
   // (chat-window::before + .nl-canvas blobs). Default false (halo visible).
   INPUT_HALO_HIDDEN: 'gvInputHaloHidden',
 
-  // Snow effect (legacy, kept for backward compat migration)
-  GV_SNOW_EFFECT: 'gvSnowEffect',
-
-  // Visual effect (replaces GV_SNOW_EFFECT): 'off' | 'snow' | 'sakura'
-  GV_VISUAL_EFFECT: 'gvVisualEffect',
-
   // Changelog
   CHANGELOG_DISMISSED_VERSION: 'gvChangelogDismissedVersion',
   CHANGELOG_NOTIFY_MODE: 'gvChangelogNotifyMode',
@@ -226,6 +220,14 @@ export const StorageKeys = {
   // Plugin cards the user has collapsed in the popup list (string[] of plugin
   // ids). Local (not sync) — it's a per-device UI preference, not user data.
   PLUGIN_UI_COLLAPSED: 'gvPluginUiCollapsed',
+
+  // Auto-reply to "continue?" prompts (Gemini only)
+  GV_AUTO_REPLY_CONTINUE_ENABLED: 'gvAutoReplyContinueEnabled',
+  GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC: 'gvAutoReplyContinueCountdownSec',
+  GV_AUTO_REPLY_CONTINUE_TEXT: 'gvAutoReplyContinueText',
+  GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV: 'gvAutoReplyContinueMaxPerConv',
+  GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES: 'gvAutoReplyContinueArmTtlMinutes',
+  GV_AUTO_REPLY_CONTINUE_PATTERNS: 'gvAutoReplyContinuePatterns',
 } as const;
 
 export type StorageKey = (typeof StorageKeys)[keyof typeof StorageKeys];

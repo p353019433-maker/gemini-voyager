@@ -1667,29 +1667,73 @@
     "message": "研究网站",
     "description": "深度研究已研究网站章节标题"
   },
-  "visualEffect": {
-    "message": "视觉特效",
-    "description": "Visual effect selector label"
+  "autoReplyContinue": {
+    "message": "自动续答",
+    "description": "Auto-Reply Continue section title"
   },
-  "visualEffectHint": {
-    "message": "为页面增添季节氛围",
-    "description": "Visual effect feature hint"
+  "autoReplyContinueHint": {
+    "message": "AI 询问“是否继续”时，自动替你回复“继续”",
+    "description": "Auto-Reply Continue hint text"
   },
-  "visualEffectOff": {
-    "message": "关闭",
-    "description": "Visual effect off option"
+  "autoReplyContinueEnabled": {
+    "message": "开启",
+    "description": "Auto-Reply Continue enable toggle label"
   },
-  "visualEffectSnow": {
-    "message": "飘雪",
-    "description": "Visual effect snow option"
+  "autoReplyContinueCountdownLabel": {
+    "message": "倒计时",
+    "description": "Auto-Reply Continue countdown label"
   },
-  "visualEffectSakura": {
-    "message": "樱花",
-    "description": "Visual effect sakura option"
+  "autoReplyContinueCountdownUnit": {
+    "message": "秒",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
   },
-  "visualEffectRain": {
-    "message": "雨",
-    "description": "Visual effect rain option"
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "单对话上限",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "次",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "授权时长",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "每次手动发送会为该对话授权此分钟数。超时后自动续答停止。",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "分钟",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "回复文本",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "留空（默认：继续 / continue）",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "自定义触发关键词（每行一条）",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "高级",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "{n} 秒后自动回复，按 Esc 取消",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "取消",
+    "description": "Auto-Reply Continue overlay cancel button"
   },
   "changelog_title": {
     "message": "更新内容",

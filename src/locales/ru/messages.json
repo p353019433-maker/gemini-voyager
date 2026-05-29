@@ -1667,29 +1667,73 @@
     "message": "Исследованные сайты",
     "description": "Заголовок раздела исследованных сайтов Deep Research"
   },
-  "visualEffect": {
-    "message": "Визуальные эффекты",
-    "description": "Visual effect selector label"
+  "autoReplyContinue": {
+    "message": "Автопродолжение",
+    "description": "Auto-Reply Continue section title"
   },
-  "visualEffectHint": {
-    "message": "Добавьте сезонную атмосферу на страницу",
-    "description": "Visual effect feature hint"
+  "autoReplyContinueHint": {
+    "message": "Когда Gemini спрашивает «продолжить?», расширение автоматически отвечает за вас.",
+    "description": "Auto-Reply Continue hint text"
   },
-  "visualEffectOff": {
-    "message": "Выкл",
-    "description": "Visual effect off option"
+  "autoReplyContinueEnabled": {
+    "message": "Включить",
+    "description": "Auto-Reply Continue enable toggle label"
   },
-  "visualEffectSnow": {
-    "message": "Снег",
-    "description": "Visual effect snow option"
+  "autoReplyContinueCountdownLabel": {
+    "message": "Обратный отсчёт",
+    "description": "Auto-Reply Continue countdown label"
   },
-  "visualEffectSakura": {
-    "message": "Сакура",
-    "description": "Visual effect sakura option"
+  "autoReplyContinueCountdownUnit": {
+    "message": "с",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
   },
-  "visualEffectRain": {
-    "message": "Дождь",
-    "description": "Visual effect rain option"
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "Макс. на диалог",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "раз",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "Длительность авторизации",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "Каждое ручное сообщение авторизует эту беседу на указанное количество минут. По истечении автоответы прекращаются.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "мин",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "Текст ответа",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "Пусто (по умолчанию: 继续 / continue)",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "Пользовательские ключевые слова (по одному на строку)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "Дополнительно",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "Автоответ через {n}с — Esc для отмены",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "Отмена",
+    "description": "Auto-Reply Continue overlay cancel button"
   },
   "changelog_title": {
     "message": "Что нового",

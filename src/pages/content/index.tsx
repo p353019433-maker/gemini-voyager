@@ -11,6 +11,7 @@ import { registerNativeHandler } from '@/features/plugins/runtime/nativeHandlers
 import { resolvePluginPlatformId } from '@/features/plugins/sites/registry';
 import { initI18n } from '@/utils/i18n';
 
+import { startAutoReplyContinue } from './autoReplyContinue/index';
 import { startCanvasExport } from './canvasExport/index';
 import { startChangelog } from './changelog/index';
 import { startChatFontSizeAdjuster } from './chatFontSize/index';
@@ -49,7 +50,6 @@ import { startSidebarWidthAdjuster } from './sidebarWidth';
 import { startTimeline } from './timeline/index';
 import { startTitleUpdater } from './titleUpdater';
 import { startUserLatex } from './userLatex/index';
-import { startRainEffect, startSakuraEffect, startSnowEffect } from './visualEffects';
 import { startWatermarkRemover } from './watermarkRemover/index';
 
 // Suppress Vite's CSS preload errors in the Chrome extension content script context.
@@ -94,6 +94,7 @@ let responseCompleteNotificationCleanup: (() => void) | null = null;
 let edgeFinalVersionNoticeCleanup: (() => void) | null = null;
 let pluginHostCleanup: (() => void) | null = null;
 let brandThemeCleanup: (() => void) | null = null;
+let autoReplyContinueCleanup: (() => void) | null = null;
 
 async function isForkFeatureEnabled(): Promise<boolean> {
   try {
@@ -222,11 +223,6 @@ async function initializeFeatures(): Promise<void> {
       startSidebarAutoHide();
       await delay(LIGHT_FEATURE_INIT_DELAY);
 
-      startSnowEffect();
-      startSakuraEffect();
-      startRainEffect();
-      await delay(LIGHT_FEATURE_INIT_DELAY);
-
       startInputCollapse();
       await delay(LIGHT_FEATURE_INIT_DELAY);
 
@@ -314,6 +310,10 @@ async function initializeFeatures(): Promise<void> {
       }
 
       startChangelog();
+      await delay(LIGHT_FEATURE_INIT_DELAY);
+
+      // Auto-reply to "continue?" prompts (Gemini only; opt-in)
+      autoReplyContinueCleanup = await startAutoReplyContinue();
       await delay(LIGHT_FEATURE_INIT_DELAY);
     }
 
@@ -613,6 +613,10 @@ function handleVisibilityChange(): void {
         if (brandThemeCleanup) {
           brandThemeCleanup();
           brandThemeCleanup = null;
+        }
+        if (autoReplyContinueCleanup) {
+          autoReplyContinueCleanup();
+          autoReplyContinueCleanup = null;
         }
         chrome.storage?.onChanged?.removeListener(onStorageChanged);
       } catch (e) {

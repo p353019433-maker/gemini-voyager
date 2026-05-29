@@ -87,8 +87,6 @@ export const BACKUPABLE_SYNC_SETTINGS_DEFAULTS: Record<string, unknown> = {
   [StorageKeys.GV_FOLDER_SPACING]: 2,
   [StorageKeys.GV_AISTUDIO_FOLDER_SPACING]: 2,
   [StorageKeys.GV_FOLDER_TREE_INDENT]: -8,
-  [StorageKeys.GV_SNOW_EFFECT]: false,
-  [StorageKeys.GV_VISUAL_EFFECT]: 'off',
   [StorageKeys.FORK_ENABLED]: false,
   [StorageKeys.GV_AISTUDIO_ENABLED]: true,
   [StorageKeys.GV_SHOW_MESSAGE_TIMESTAMPS]: false,
@@ -97,6 +95,12 @@ export const BACKUPABLE_SYNC_SETTINGS_DEFAULTS: Record<string, unknown> = {
   [StorageKeys.FOLDER_HIDE_ARCHIVED_CONVERSATIONS]: false,
   [StorageKeys.CONTEXT_SYNC_ENABLED]: false,
   [StorageKeys.CONTEXT_SYNC_PORT]: 3030,
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED]: false,
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]: 3,
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT]: '',
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]: 10,
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]: 120,
+  [StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]: null,
 };
 
 export const BACKUPABLE_SYNC_SETTINGS_KEYS = Object.keys(BACKUPABLE_SYNC_SETTINGS_DEFAULTS);

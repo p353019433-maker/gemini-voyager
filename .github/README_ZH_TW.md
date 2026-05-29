@@ -93,7 +93,6 @@
 - **💡 [提示詞庫](https://voyager.nagi.fun/zh_TW/guide/prompts)**: 跨平台同步提示詞，支持 Gemini、AI Studio 及 [自定義網站](https://voyager.nagi.fun/zh_TW/guide/custom-websites)。
 - **☁️ [雲同步](https://voyager.nagi.fun/zh_TW/guide/cloud-sync)**: 支持將資料夾和提示詞庫同步到 Google Drive。
 - **📐 公式複製**: 一鍵複製 LaTeX 和 MathML (Word) 源碼。
-- **🌦️ 視覺特效**: 在設置面板中一鍵切換 **飄雪**、**電影感雨滴** 或 **櫻花飄落**，給頁面增添季節氛圍。
 
 ### ✨ Gemini 專屬增強
 
@@ -111,12 +110,6 @@
   - **[輸入框摺疊](https://voyager.nagi.fun/zh_TW/guide/input-collapse)**: 輸入框自動收納，釋放閱讀空間。
   - **[預設模型](https://voyager.nagi.fun/zh_TW/guide/default-model)**: 為新對話設置預設選中的模型。
   - **[隱藏最近項目和 Gem](https://voyager.nagi.fun/zh_TW/guide/recents-hider)**: 隱藏側邊欄的”最近”列表，減少干擾。
-
-### 🎨 個性化體驗
-
-- 點擊插件圖標，在設定中的 **視覺特效** 裡可切換 `關閉`、`飄雪`、`櫻花`、`雨`。
-- 特效以輕量全螢幕覆蓋層呈現，不會阻擋頁面互動。
-- 切換特效或關閉時，粒子會自然退場，不會突兀消失。
 
 ---
 

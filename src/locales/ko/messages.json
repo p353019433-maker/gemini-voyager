@@ -1667,29 +1667,73 @@
     "message": "조사한 웹사이트",
     "description": "Deep Research 조사한 웹사이트 섹션 헤더"
   },
-  "visualEffect": {
-    "message": "시각 효과",
-    "description": "Visual effect selector label"
+  "autoReplyContinue": {
+    "message": "자동 계속 응답",
+    "description": "Auto-Reply Continue section title"
   },
-  "visualEffectHint": {
-    "message": "페이지에 계절 분위기 연출",
-    "description": "Visual effect feature hint"
+  "autoReplyContinueHint": {
+    "message": "AI가 '계속할까요?'라고 물을 때 자동으로 '계속'이라고 응답합니다",
+    "description": "Auto-Reply Continue hint text"
   },
-  "visualEffectOff": {
-    "message": "끄기",
-    "description": "Visual effect off option"
+  "autoReplyContinueEnabled": {
+    "message": "사용",
+    "description": "Auto-Reply Continue enable toggle label"
   },
-  "visualEffectSnow": {
-    "message": "눈",
-    "description": "Visual effect snow option"
+  "autoReplyContinueCountdownLabel": {
+    "message": "카운트다운",
+    "description": "Auto-Reply Continue countdown label"
   },
-  "visualEffectSakura": {
-    "message": "벚꽃",
-    "description": "Visual effect sakura option"
+  "autoReplyContinueCountdownUnit": {
+    "message": "초",
+    "description": "Auto-Reply Continue countdown unit (seconds)"
   },
-  "visualEffectRain": {
-    "message": "비",
-    "description": "Visual effect rain option"
+  "autoReplyContinueMaxPerConvLabel": {
+    "message": "대화당 최대 횟수",
+    "description": "Auto-Reply Continue max-per-conversation label"
+  },
+  "autoReplyContinueMaxPerConvUnit": {
+    "message": "회",
+    "description": "Auto-Reply Continue max-per-conversation unit (times)"
+  },
+  "autoReplyContinueArmTtlLabel": {
+    "message": "권한 유효 시간",
+    "description": "Auto-Reply Continue: armed authorization lifetime label"
+  },
+  "autoReplyContinueArmTtlHint": {
+    "message": "수동으로 메시지를 보낼 때마다 해당 대화가 지정한 분 동안 권한을 얻습니다. 만료 후 자동 응답이 중지됩니다.",
+    "description": "Auto-Reply Continue: armed authorization lifetime hint"
+  },
+  "autoReplyContinueArmTtlUnit": {
+    "message": "분",
+    "description": "Auto-Reply Continue: armed authorization lifetime unit (minutes)"
+  },
+  "autoReplyContinueTextLabel": {
+    "message": "응답 텍스트",
+    "description": "Auto-Reply Continue reply text label"
+  },
+  "autoReplyContinueTextPlaceholder": {
+    "message": "비워두면 기본값 (계속 / continue)",
+    "description": "Auto-Reply Continue reply text placeholder"
+  },
+  "autoReplyContinuePatternsLabel": {
+    "message": "사용자 정의 키워드 (한 줄에 하나)",
+    "description": "Auto-Reply Continue custom keywords label"
+  },
+  "autoReplyContinueAdvancedLabel": {
+    "message": "고급",
+    "description": "Auto-Reply Continue: advanced settings disclosure label"
+  },
+  "autoReplyContinuePatternsPlaceholder": {
+    "message": "要继续吗\n是否继续\nshall I continue\ncontinue?",
+    "description": "Auto-Reply Continue: custom keywords textarea placeholder (example patterns)"
+  },
+  "autoReplyContinueOverlayMessage": {
+    "message": "{n}초 후 자동 응답, Esc로 취소",
+    "description": "Auto-Reply Continue overlay countdown message; {n} is replaced with the remaining seconds"
+  },
+  "autoReplyContinueOverlayCancel": {
+    "message": "취소",
+    "description": "Auto-Reply Continue overlay cancel button"
   },
   "changelog_title": {
     "message": "새로운 기능",

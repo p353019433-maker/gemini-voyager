@@ -18,13 +18,3 @@ Muitas seções no popup e as que você mais usa estão lá embaixo?
 
 Passe o mouse sobre qualquer cartão de configuração e os botões ▲/▼ aparecerão no canto superior direito. Clique para mover um cartão para cima ou para baixo. Sua disposição é salva automaticamente.
 
-## Efeitos Visuais
-
-Escolha `Neve`, `Sakura` ou `Chuva` para uma atmosfera sazonal.
-
-O Voyager não se limita a melhorias utilitárias. Pode também mudar o ambiente da página.
-
-- **Neve**: Flocos suaves para uma sensação calma de inverno.
-- **Sakura**: Pétalas de flor de cerejeira flutuando para um toque primaveril mais leve.
-- **Chuva**: Uma camada de chuva cinematográfica com gotas inclinadas e salpicos subtis.
-- **Transição suave**: Ao desativar ou trocar de efeito, as partículas desaparecem naturalmente.

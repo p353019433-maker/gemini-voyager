@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import browser from 'webextension-polyfill';
 
@@ -89,9 +89,9 @@ const POPUP_SECTION_IDS = [
   'editInputWidth',
   'sidebarWidth',
   'sidebarBehavior',
-  'visualEffect',
   'formulaCopy',
   'keyboardShortcuts',
+  'autoReplyContinue',
   'inputCollapse',
   'promptManager',
   'plugins',
@@ -379,7 +379,6 @@ interface SettingsUpdate {
   draftAutoSaveEnabled?: boolean;
   sidebarAutoHideEnabled?: boolean;
   sidebarFullHideEnabled?: boolean;
-  visualEffect?: 'off' | 'snow' | 'sakura' | 'rain';
   preventAutoScrollEnabled?: boolean;
   inputHaloHidden?: boolean;
   forkEnabled?: boolean;
@@ -389,6 +388,12 @@ interface SettingsUpdate {
   showMessageTimestamps?: boolean;
   folderProjectEnabled?: boolean;
   persistentExportToolbarEnabled?: boolean;
+  autoReplyContinueEnabled?: boolean;
+  autoReplyContinueCountdownSec?: number;
+  autoReplyContinueText?: string;
+  autoReplyContinueMaxPerConv?: number;
+  autoReplyContinueArmTtlMinutes?: number;
+  autoReplyContinuePatterns?: string;
 }
 
 function SectionReorderControls({
@@ -470,6 +475,81 @@ function SectionReorderControls({
   );
 }
 
+/**
+ * A controlled-but-forgiving numeric input.
+ *
+ * Tracks the user's literal keystrokes in a local string draft so they can
+ * fully clear the field (or pass through transient invalid states while
+ * typing a longer number) without the value snapping back to a clamped
+ * default. The clamp + commit only runs on blur or Enter; external changes
+ * to `value` are mirrored into the draft only while the field is unfocused.
+ */
+function NumberFieldInput({
+  id,
+  value,
+  min,
+  max,
+  fallback,
+  onCommit,
+  className,
+}: {
+  id: string;
+  value: number;
+  min: number;
+  max: number;
+  fallback: number;
+  onCommit: (next: number) => void;
+  className?: string;
+}) {
+  const [draft, setDraft] = useState<string>(String(value));
+  const focusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!focusedRef.current) {
+      setDraft(String(value));
+    }
+  }, [value]);
+
+  const commit = () => {
+    const trimmed = draft.trim();
+    let next: number;
+    if (trimmed === '') {
+      next = fallback;
+    } else {
+      const parsed = Number(trimmed);
+      next = Number.isFinite(parsed) ? parsed : fallback;
+    }
+    next = Math.max(min, Math.min(max, Math.round(next)));
+    setDraft(String(next));
+    if (next !== value) onCommit(next);
+  };
+
+  return (
+    <input
+      id={id}
+      type="number"
+      inputMode="numeric"
+      min={min}
+      max={max}
+      value={draft}
+      onFocus={() => {
+        focusedRef.current = true;
+      }}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={() => {
+        focusedRef.current = false;
+        commit();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          (e.target as HTMLInputElement).blur();
+        }
+      }}
+      className={className}
+    />
+  );
+}
+
 export default function Popup() {
   const { t, language } = useLanguage();
   const [mode, setMode] = useState<ScrollMode>('flow');
@@ -509,9 +589,15 @@ export default function Popup() {
   const [aiStudioEnterSendEnabled, setAiStudioEnterSendEnabled] = useState<boolean>(false);
   const [safariEnterFixEnabled, setSafariEnterFixEnabled] = useState<boolean>(false);
   const [draftAutoSaveEnabled, setDraftAutoSaveEnabled] = useState<boolean>(false);
+  const [autoReplyContinueEnabled, setAutoReplyContinueEnabled] = useState<boolean>(false);
+  const [autoReplyContinueCountdownSec, setAutoReplyContinueCountdownSec] = useState<number>(3);
+  const [autoReplyContinueText, setAutoReplyContinueText] = useState<string>('');
+  const [autoReplyContinueMaxPerConv, setAutoReplyContinueMaxPerConv] = useState<number>(10);
+  const [autoReplyContinueArmTtlMinutes, setAutoReplyContinueArmTtlMinutes] =
+    useState<number>(120);
+  const [autoReplyContinuePatterns, setAutoReplyContinuePatterns] = useState<string>('');
   const [sidebarAutoHideEnabled, setSidebarAutoHideEnabled] = useState<boolean>(false);
   const [sidebarFullHideEnabled, setSidebarFullHideEnabled] = useState<boolean>(false);
-  const [visualEffect, setVisualEffect] = useState<'off' | 'snow' | 'sakura' | 'rain'>('off');
   const [preventAutoScrollEnabled, setPreventAutoScrollEnabled] = useState<boolean>(false);
   const [inputHaloHidden, setInputHaloHidden] = useState<boolean>(false);
   const [forkEnabled, setForkEnabled] = useState<boolean>(false);
@@ -698,15 +784,30 @@ export default function Popup() {
         payload[StorageKeys.SAFARI_ENTER_FIX] = settings.safariEnterFixEnabled;
       if (typeof settings.draftAutoSaveEnabled === 'boolean')
         payload[StorageKeys.DRAFT_AUTO_SAVE] = settings.draftAutoSaveEnabled;
+      if (typeof settings.autoReplyContinueEnabled === 'boolean')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED] = settings.autoReplyContinueEnabled;
+      if (typeof settings.autoReplyContinueCountdownSec === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC] =
+          settings.autoReplyContinueCountdownSec;
+      if (typeof settings.autoReplyContinueText === 'string')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT] = settings.autoReplyContinueText;
+      if (typeof settings.autoReplyContinueMaxPerConv === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV] =
+          settings.autoReplyContinueMaxPerConv;
+      if (typeof settings.autoReplyContinueArmTtlMinutes === 'number')
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES] =
+          settings.autoReplyContinueArmTtlMinutes;
+      if (typeof settings.autoReplyContinuePatterns === 'string') {
+        const lines = settings.autoReplyContinuePatterns
+          .split('\n')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        payload[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS] = lines.length > 0 ? lines : null;
+      }
       if (typeof settings.sidebarAutoHideEnabled === 'boolean')
         payload.gvSidebarAutoHide = settings.sidebarAutoHideEnabled;
       if (typeof settings.sidebarFullHideEnabled === 'boolean')
         payload.gvSidebarFullHide = settings.sidebarFullHideEnabled;
-      if (settings.visualEffect) {
-        payload.gvVisualEffect = settings.visualEffect;
-        // Clear legacy key
-        payload.gvSnowEffect = false;
-      }
       if (typeof settings.preventAutoScrollEnabled === 'boolean')
         payload.gvPreventAutoScrollEnabled = settings.preventAutoScrollEnabled;
       if (typeof settings.inputHaloHidden === 'boolean')
@@ -1080,10 +1181,14 @@ export default function Popup() {
           [StorageKeys.AISTUDIO_ENTER_SEND]: false,
           [StorageKeys.SAFARI_ENTER_FIX]: false,
           [StorageKeys.DRAFT_AUTO_SAVE]: false,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED]: false,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]: 3,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT]: '',
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]: 10,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]: 120,
+          [StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS]: null,
           gvSidebarAutoHide: false,
           gvSidebarFullHide: false,
-          gvVisualEffect: 'off',
-          gvSnowEffect: false,
           gvPreventAutoScrollEnabled: false,
           [StorageKeys.INPUT_HALO_HIDDEN]: false,
           [StorageKeys.FORK_ENABLED]: false,
@@ -1153,21 +1258,32 @@ export default function Popup() {
           setAiStudioEnterSendEnabled(res?.[StorageKeys.AISTUDIO_ENTER_SEND] === true);
           setSafariEnterFixEnabled(res?.[StorageKeys.SAFARI_ENTER_FIX] === true);
           setDraftAutoSaveEnabled(res?.[StorageKeys.DRAFT_AUTO_SAVE] === true);
+          setAutoReplyContinueEnabled(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_ENABLED] === true);
+          {
+            const sec = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_COUNTDOWN_SEC]);
+            setAutoReplyContinueCountdownSec(Number.isFinite(sec) && sec >= 1 ? sec : 3);
+          }
+          setAutoReplyContinueText(String(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_TEXT] ?? ''));
+          {
+            const max = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_MAX_PER_CONV]);
+            setAutoReplyContinueMaxPerConv(Number.isFinite(max) && max >= 1 ? max : 10);
+          }
+          {
+            const ttl = Number(res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_ARM_TTL_MINUTES]);
+            setAutoReplyContinueArmTtlMinutes(
+              Number.isFinite(ttl) && ttl >= 1 && ttl <= 1440 ? Math.round(ttl) : 120,
+            );
+          }
+          {
+            const patterns = res?.[StorageKeys.GV_AUTO_REPLY_CONTINUE_PATTERNS];
+            if (Array.isArray(patterns)) {
+              setAutoReplyContinuePatterns(patterns.filter((p) => typeof p === 'string').join('\n'));
+            } else {
+              setAutoReplyContinuePatterns('');
+            }
+          }
           setSidebarAutoHideEnabled(res?.gvSidebarAutoHide === true);
           setSidebarFullHideEnabled(res?.gvSidebarFullHide === true);
-          // Resolve visual effect: new key takes precedence over legacy boolean
-          const storedVisualEffect = res?.gvVisualEffect;
-          if (
-            storedVisualEffect === 'snow' ||
-            storedVisualEffect === 'sakura' ||
-            storedVisualEffect === 'rain'
-          ) {
-            setVisualEffect(storedVisualEffect);
-          } else if (res?.gvSnowEffect === true) {
-            setVisualEffect('snow');
-          } else {
-            setVisualEffect('off');
-          }
           setPreventAutoScrollEnabled(res?.gvPreventAutoScrollEnabled === true);
           setInputHaloHidden(res?.[StorageKeys.INPUT_HALO_HIDDEN] === true);
           setForkEnabled(res?.[StorageKeys.FORK_ENABLED] === true);
@@ -1495,7 +1611,7 @@ export default function Popup() {
         return !isSafariBrowser;
       case 'folderTreeIndent':
       case 'sidebarBehavior':
-      case 'visualEffect':
+      case 'autoReplyContinue':
         return !isAIStudio;
       case 'plugins':
         // The Plugins section is always rendered pinned to the top (and only on
@@ -2286,135 +2402,6 @@ export default function Popup() {
             </Card>,
           )}
 
-        {/* Visual Effect - Gemini only */}
-        {!isAIStudio &&
-          wrapSection(
-            'visualEffect',
-            <Card className="p-4 transition-all hover:shadow-md">
-              <CardContent className="p-0">
-                <div className="flex-1">
-                  <Label className="text-sm font-medium">{t('visualEffect')}</Label>
-                  <p className="text-muted-foreground mt-1 text-xs">{t('visualEffectHint')}</p>
-                </div>
-                <div className="bg-secondary/60 mt-3 flex items-center gap-0.5 rounded-full p-1">
-                  {(
-                    [
-                      {
-                        value: 'off' as const,
-                        label: t('visualEffectOff'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'snow' as const,
-                        label: t('visualEffectSnow'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="12" y1="2" x2="12" y2="22" />
-                            <line x1="2" y1="12" x2="22" y2="12" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                            <line x1="19.07" y1="4.93" x2="4.93" y2="19.07" />
-                            <line x1="12" y1="2" x2="14.5" y2="4.5" />
-                            <line x1="12" y1="2" x2="9.5" y2="4.5" />
-                            <line x1="12" y1="22" x2="14.5" y2="19.5" />
-                            <line x1="12" y1="22" x2="9.5" y2="19.5" />
-                            <line x1="2" y1="12" x2="4.5" y2="9.5" />
-                            <line x1="2" y1="12" x2="4.5" y2="14.5" />
-                            <line x1="22" y1="12" x2="19.5" y2="9.5" />
-                            <line x1="22" y1="12" x2="19.5" y2="14.5" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'sakura' as const,
-                        label: t('visualEffectSakura'),
-                        icon: (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <g transform="translate(12,12)">
-                              {[0, 72, 144, 216, 288].map((deg) => (
-                                <ellipse
-                                  key={deg}
-                                  cx="0"
-                                  cy="-6"
-                                  rx="2.8"
-                                  ry="5.5"
-                                  transform={`rotate(${deg})`}
-                                  opacity="0.85"
-                                />
-                              ))}
-                              <circle cx="0" cy="0" r="2" opacity="0.6" />
-                            </g>
-                          </svg>
-                        ),
-                      },
-                      {
-                        value: 'rain' as const,
-                        label: t('visualEffectRain'),
-                        icon: (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          >
-                            <line x1="8" y1="3" x2="6.5" y2="10" />
-                            <line x1="14" y1="2" x2="12.5" y2="9" />
-                            <line x1="20" y1="4" x2="18.5" y2="11" />
-                            <line x1="5" y1="12" x2="3.5" y2="19" />
-                            <line x1="11" y1="11" x2="9.5" y2="18" />
-                            <line x1="17" y1="13" x2="15.5" y2="20" />
-                          </svg>
-                        ),
-                      },
-                    ] as const
-                  ).map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setVisualEffect(option.value);
-                        apply({ visualEffect: option.value });
-                      }}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-full py-1.5 text-xs font-bold transition-all duration-200 ${
-                        visualEffect === option.value
-                          ? 'bg-background text-foreground shadow-md'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      {option.icon}
-                      <span>{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>,
-          )}
-
         {/* Formula Copy Options */}
         {wrapSection(
           'formulaCopy',
@@ -2474,6 +2461,184 @@ export default function Popup() {
 
         {/* Keyboard Shortcuts */}
         {wrapSection('keyboardShortcuts', <KeyboardShortcutSettings />)}
+
+        {/* Auto-Reply Continue - Gemini only */}
+        {!isAIStudio &&
+          wrapSection(
+            'autoReplyContinue',
+            <Card className="p-4 transition-all hover:shadow-md">
+              <CardTitle className="mb-4">{t('autoReplyContinue')}</CardTitle>
+              <CardContent className="space-y-4 p-0">
+                <p className="text-muted-foreground text-xs">{t('autoReplyContinueHint')}</p>
+                <div className="group flex items-center justify-between">
+                  <Label
+                    htmlFor="auto-reply-continue-enabled"
+                    className="group-hover:text-primary cursor-pointer text-sm font-medium transition-colors"
+                  >
+                    {t('autoReplyContinueEnabled')}
+                  </Label>
+                  <Switch
+                    id="auto-reply-continue-enabled"
+                    checked={autoReplyContinueEnabled}
+                    onChange={(e) => {
+                      setAutoReplyContinueEnabled(e.target.checked);
+                      apply({ autoReplyContinueEnabled: e.target.checked });
+                    }}
+                  />
+                </div>
+
+                {autoReplyContinueEnabled && (
+                  <>
+                    <div className="flex items-center justify-between gap-3">
+                      <Label
+                        htmlFor="auto-reply-continue-countdown"
+                        className="text-sm font-medium"
+                      >
+                        {t('autoReplyContinueCountdownLabel')}
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <NumberFieldInput
+                          id="auto-reply-continue-countdown"
+                          value={autoReplyContinueCountdownSec}
+                          min={1}
+                          max={30}
+                          fallback={3}
+                          onCommit={(v) => {
+                            setAutoReplyContinueCountdownSec(v);
+                            apply({ autoReplyContinueCountdownSec: v });
+                          }}
+                          className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                        />
+                        <span className="text-muted-foreground text-xs">
+                          {t('autoReplyContinueCountdownUnit')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="auto-reply-continue-text"
+                        className="mb-2 block text-sm font-medium"
+                      >
+                        {t('autoReplyContinueTextLabel')}
+                      </Label>
+                      <input
+                        id="auto-reply-continue-text"
+                        type="text"
+                        value={autoReplyContinueText}
+                        placeholder={t('autoReplyContinueTextPlaceholder')}
+                        onChange={(e) => {
+                          setAutoReplyContinueText(e.target.value);
+                          apply({ autoReplyContinueText: e.target.value });
+                        }}
+                        className="border-input placeholder:text-muted-foreground flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                      />
+                    </div>
+
+                    <details className="border-border/60 group/adv rounded-md border px-3 py-2">
+                      <summary className="cursor-pointer text-sm font-medium select-none [&::-webkit-details-marker]:hidden">
+                        <span className="inline-flex items-center gap-1.5">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="transition-transform group-open/adv:rotate-90"
+                          >
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                          {t('autoReplyContinueAdvancedLabel')}
+                        </span>
+                      </summary>
+                      <div className="mt-3 space-y-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <Label
+                            htmlFor="auto-reply-continue-max"
+                            className="text-sm font-medium"
+                          >
+                            {t('autoReplyContinueMaxPerConvLabel')}
+                          </Label>
+                          <div className="flex items-center gap-2">
+                            <NumberFieldInput
+                              id="auto-reply-continue-max"
+                              value={autoReplyContinueMaxPerConv}
+                              min={1}
+                              max={100}
+                              fallback={10}
+                              onCommit={(v) => {
+                                setAutoReplyContinueMaxPerConv(v);
+                                apply({ autoReplyContinueMaxPerConv: v });
+                              }}
+                              className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                              {t('autoReplyContinueMaxPerConvUnit')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1">
+                            <Label
+                              htmlFor="auto-reply-continue-arm-ttl"
+                              className="text-sm font-medium"
+                            >
+                              {t('autoReplyContinueArmTtlLabel')}
+                            </Label>
+                            <p className="text-muted-foreground mt-1 text-xs">
+                              {t('autoReplyContinueArmTtlHint')}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <NumberFieldInput
+                              id="auto-reply-continue-arm-ttl"
+                              value={autoReplyContinueArmTtlMinutes}
+                              min={1}
+                              max={1440}
+                              fallback={120}
+                              onCommit={(v) => {
+                                setAutoReplyContinueArmTtlMinutes(v);
+                                apply({ autoReplyContinueArmTtlMinutes: v });
+                              }}
+                              className="border-input flex h-9 w-20 rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                              {t('autoReplyContinueArmTtlUnit')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label
+                            htmlFor="auto-reply-continue-patterns"
+                            className="mb-2 block text-sm font-medium"
+                          >
+                            {t('autoReplyContinuePatternsLabel')}
+                          </Label>
+                          <textarea
+                            id="auto-reply-continue-patterns"
+                            value={autoReplyContinuePatterns}
+                            placeholder={t('autoReplyContinuePatternsPlaceholder')}
+                            spellCheck={false}
+                            onChange={(e) => {
+                              setAutoReplyContinuePatterns(e.target.value);
+                              apply({ autoReplyContinuePatterns: e.target.value });
+                            }}
+                            rows={5}
+                            className="border-input placeholder:text-muted-foreground/70 flex w-full rounded-md border bg-transparent px-3 py-2 font-mono text-xs leading-relaxed shadow-sm"
+                          />
+                        </div>
+                      </div>
+                    </details>
+                  </>
+                )}
+              </CardContent>
+            </Card>,
+          )}
 
         {/* Input Collapse Options */}
         {wrapSection(
